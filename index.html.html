@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Mastery — The Complete AI Prompting Course</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3d;
+    --accent: #f0c060;
+    --accent2: #e07b4f;
+    --accent3: #7b8fff;
+    --text: #e8e8f0;
+    --muted: #7a7a9a;
+    --card-glow: rgba(240,192,96,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 1000;
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 4px;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(240,192,96,0.35);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: pulse 6s ease-in-out infinite;
+  }
+
+  .hero-orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(240,192,96,0.12) 0%, transparent 70%);
+    top: 10%; left: 15%;
+  }
+
+  .hero-orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(224,123,79,0.1) 0%, transparent 70%);
+    bottom: 15%; right: 10%;
+    animation-delay: -3s;
+  }
+
+  .hero-orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(123,143,255,0.08) 0%, transparent 70%);
+    top: 40%; right: 25%;
+    animation-delay: -1.5s;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: rgba(240,192,96,0.1);
+    border: 1px solid rgba(240,192,96,0.3);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 8vw, 7.5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.2rem;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+    margin: 1.8rem 0 3rem;
+    font-weight: 400;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #000;
+    border: none;
+    padding: 1rem 2.2rem;
+    border-radius: 6px;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(240,192,96,0.4);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 1rem 2.2rem;
+    border-radius: 6px;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.8s ease 0.4s both;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 7rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-full {
+    max-width: none;
+    padding: 7rem 0;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.2rem;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 580px;
+  }
+
+  /* ─── WHAT YOU'LL LEARN STRIP ─── */
+  .learn-strip {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .strip-track {
+    display: flex;
+    gap: 0;
+    animation: scroll 30s linear infinite;
+    width: max-content;
+  }
+
+  .strip-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0 2.5rem;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-right: 1px solid var(--border);
+  }
+
+  .strip-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── CURRICULUM ─── */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .module-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+
+  .module-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--card-glow);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .module-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(240,192,96,0.4);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  }
+
+  .module-card:hover::before { opacity: 1; }
+
+  .module-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .module-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .module-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 1.4rem;
+  }
+
+  .module-lessons {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .module-lessons li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .module-lessons li::before {
+    content: '›';
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0.05em;
+  }
+
+  .module-badge {
+    position: absolute;
+    top: 1.2rem; right: 1.2rem;
+    background: rgba(240,192,96,0.12);
+    border: 1px solid rgba(240,192,96,0.25);
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  /* ─── DEEP DIVE CONCEPTS ─── */
+  .concepts-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 4rem;
+    align-items: start;
+    margin-top: 3rem;
+  }
+
+  .concept-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .concept-tab {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .concept-tab.active {
+    border-color: var(--accent);
+    background: rgba(240,192,96,0.06);
+  }
+
+  .concept-tab-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .concept-tab-icon {
+    font-size: 1.2rem;
+  }
+
+  .concept-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2.5rem;
+    min-height: 380px;
+    display: none;
+  }
+
+  .concept-panel.active { display: block; }
+
+  .concept-panel h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .concept-panel p {
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
+  }
+
+  .code-block {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: #c0c0d8;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+
+  .code-block .kw { color: var(--accent3); }
+  .code-block .str { color: #a0e0a0; }
+  .code-block .cm { color: var(--muted); }
+  .code-block .hl { color: var(--accent); font-weight: 500; }
+
+  .tip-box {
+    background: rgba(123,143,255,0.08);
+    border: 1px solid rgba(123,143,255,0.2);
+    border-left: 3px solid var(--accent3);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.65;
+    margin-top: 1rem;
+  }
+
+  .warning-box {
+    background: rgba(224,123,79,0.08);
+    border: 1px solid rgba(224,123,79,0.2);
+    border-left: 3px solid var(--accent2);
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.65;
+    margin-top: 1rem;
+  }
+
+  /* ─── FRAMEWORK TABLE ─── */
+  .framework-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 3rem;
+    margin-top: 3rem;
+  }
+
+  .framework-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .framework-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .framework-card:hover { border-color: var(--accent); }
+
+  .fw-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .fw-word {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .fw-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ─── EXAMPLES GALLERY ─── */
+  .examples-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .example-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .example-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .example-type {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .type-bad { color: #ff6b6b; }
+  .type-good { color: #6bffb8; }
+
+  .example-body {
+    padding: 1.4rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .example-note {
+    padding: 0.9rem 1.4rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ─── ADVANCED TECHNIQUES ─── */
+  .techniques-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-top: 3rem;
+  }
+
+  .technique-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.8rem;
+    transition: all 0.25s;
+    position: relative;
+  }
+
+  .technique-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+  }
+
+  .technique-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .technique-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .technique-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .technique-level {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+  }
+
+  .level-beg { background: rgba(107,255,184,0.1); color: #6bffb8; }
+  .level-int { background: rgba(240,192,96,0.1); color: var(--accent); }
+  .level-adv { background: rgba(224,123,79,0.1); color: var(--accent2); }
+
+  /* ─── CHEAT SHEET ─── */
+  .cheatsheet {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 3rem;
+  }
+
+  .cheatsheet-header {
+    background: linear-gradient(135deg, rgba(240,192,96,0.1), rgba(224,123,79,0.1));
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cheatsheet-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .cheatsheet-body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .cs-col {
+    padding: 1.8rem;
+    border-right: 1px solid var(--border);
+  }
+
+  .cs-col:last-child { border-right: none; }
+
+  .cs-col-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .cs-item {
+    margin-bottom: 0.8rem;
+  }
+
+  .cs-term {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .cs-def {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: 0.1rem;
+  }
+
+  /* ─── PRICING ─── */
+  .pricing-wrapper {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .pricing-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 320px;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+  }
+
+  .pricing-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(160deg, var(--surface), rgba(240,192,96,0.04));
+  }
+
+  .featured-label {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #000;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .pricing-tier {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .pricing-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .pricing-price sup {
+    font-size: 1.5rem;
+    vertical-align: super;
+  }
+
+  .pricing-period {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .pricing-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 2rem;
+  }
+
+  .pricing-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .pricing-features li .check {
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-top: 3.5rem;
+  }
+
+  .testimonial {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.8rem;
+  }
+
+  .testimonial-text {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+    font-style: italic;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .author-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .author-name {
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+
+  .author-title {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .stars {
+    color: var(--accent);
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 2px;
+  }
+
+  /* ─── FAQ ─── */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 3rem;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .faq-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.3rem 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.92rem;
+    gap: 1rem;
+    user-select: none;
+  }
+
+  .faq-icon {
+    color: var(--accent);
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .faq-item.open .faq-answer { max-height: 300px; }
+
+  .faq-answer-inner {
+    padding: 0 1.5rem 1.4rem;
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  /* ─── CTA BANNER ─── */
+  .cta-section {
+    background: linear-gradient(135deg, rgba(240,192,96,0.08), rgba(224,123,79,0.05));
+    border: 1px solid rgba(240,192,96,0.2);
+    border-radius: 20px;
+    text-align: center;
+    padding: 5rem 2rem;
+    margin: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(240,192,96,0.06) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cta-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+    line-height: 1.15;
+  }
+
+  .cta-section p {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  .guarantee {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 1.5rem;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-sub {
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    list-style: none;
+    margin-bottom: 2rem;
+  }
+
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  .footer-copy {
+    font-size: 0.75rem;
+    color: #3a3a55;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    margin: 1.5rem 0;
+    border-radius: 2px;
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .concepts-layout { grid-template-columns: 1fr; }
+    .examples-grid { grid-template-columns: 1fr; }
+    .techniques-grid { grid-template-columns: 1fr 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .cheatsheet-body { grid-template-columns: 1fr; }
+    .cs-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .cs-col:last-child { border-bottom: none; }
+  }
+
+  @media (max-width: 600px) {
+    .techniques-grid { grid-template-columns: 1fr; }
+    .modules-grid { grid-template-columns: 1fr; }
+    .pricing-card { width: 100%; }
+    .hero-stats { gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Prompt Mastery</div>
+  <ul class="nav-links">
+    <li><a href="#curriculum">Curriculum</a></li>
+    <li><a href="#concepts">Concepts</a></li>
+    <li><a href="#techniques">Techniques</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Enroll Now</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+
+  <span class="hero-tag">✦ The Complete Guide — 2025 Edition</span>
+  <h1>Master the Art of<br><em>AI Prompting</em></h1>
+  <p class="hero-sub">Stop guessing. Learn the exact science and craft behind how AI models think — so you can get professional, reliable results every single time.</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-primary">Start Learning Today</a>
+    <a href="#curriculum" class="btn-secondary">View Curriculum</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">12</span>
+      <span class="stat-label">In-depth Modules</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">80+</span>
+      <span class="stat-label">Real Examples</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">15+</span>
+      <span class="stat-label">Techniques Covered</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">∞</span>
+      <span class="stat-label">Lifetime Access</span>
+    </div>
+  </div>
+</div>
+
+<!-- SCROLLING STRIP -->
+<div class="learn-strip">
+  <div class="strip-track" id="stripTrack">
+    <div class="strip-item"><span class="strip-dot"></span>Prompt Structure</div>
+    <div class="strip-item"><span class="strip-dot"></span>Chain-of-Thought</div>
+    <div class="strip-item"><span class="strip-dot"></span>Few-Shot Learning</div>
+    <div class="strip-item"><span class="strip-dot"></span>Role Prompting</div>
+    <div class="strip-item"><span class="strip-dot"></span>Temperature & Tokens</div>
+    <div class="strip-item"><span class="strip-dot"></span>System Prompts</div>
+    <div class="strip-item"><span class="strip-dot"></span>Context Windows</div>
+    <div class="strip-item"><span class="strip-dot"></span>Hallucination Control</div>
+    <div class="strip-item"><span class="strip-dot"></span>Output Formatting</div>
+    <div class="strip-item"><span class="strip-dot"></span>Iterative Refinement</div>
+    <div class="strip-item"><span class="strip-dot"></span>Multimodal Prompting</div>
+    <div class="strip-item"><span class="strip-dot"></span>API Integration</div>
+    <div class="strip-item"><span class="strip-dot"></span>Prompt Structure</div>
+    <div class="strip-item"><span class="strip-dot"></span>Chain-of-Thought</div>
+    <div class="strip-item"><span class="strip-dot"></span>Few-Shot Learning</div>
+    <div class="strip-item"><span class="strip-dot"></span>Role Prompting</div>
+    <div class="strip-item"><span class="strip-dot"></span>Temperature & Tokens</div>
+    <div class="strip-item"><span class="strip-dot"></span>System Prompts</div>
+    <div class="strip-item"><span class="strip-dot"></span>Context Windows</div>
+    <div class="strip-item"><span class="strip-dot"></span>Hallucination Control</div>
+    <div class="strip-item"><span class="strip-dot"></span>Output Formatting</div>
+    <div class="strip-item"><span class="strip-dot"></span>Iterative Refinement</div>
+    <div class="strip-item"><span class="strip-dot"></span>Multimodal Prompting</div>
+    <div class="strip-item"><span class="strip-dot"></span>API Integration</div>
+  </div>
+</div>
+
+<!-- CURRICULUM -->
+<section id="curriculum">
+  <div class="reveal">
+    <span class="section-tag">✦ Full Curriculum</span>
+    <h2 class="section-title">Everything you need,<br>nothing you don't.</h2>
+    <p class="section-sub">12 structured modules that take you from zero to expert — covering how AI thinks, how prompts work, and how to engineer outputs that actually do what you need.</p>
+  </div>
+
+  <div class="modules-grid">
+
+    <div class="module-card reveal">
+      <span class="module-badge">Foundation</span>
+      <span class="module-num">MODULE 01</span>
+      <h3 class="module-title">How Large Language Models Actually Work</h3>
+      <p class="module-desc">Before writing a single prompt, understand what you're talking to. No fluff — just the concepts that actually matter for prompting.</p>
+      <ul class="module-lessons">
+        <li>Tokens, not words: how AI reads text</li>
+        <li>Probability distributions & next-token prediction</li>
+        <li>Training data and why it shapes behavior</li>
+        <li>The difference between base models and instruction-tuned models</li>
+        <li>RLHF: how models learn to be helpful</li>
+        <li>Context windows explained simply</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Foundation</span>
+      <span class="module-num">MODULE 02</span>
+      <h3 class="module-title">Anatomy of a Perfect Prompt</h3>
+      <p class="module-desc">A prompt is not just a question. It's a structured instruction set. Learn the layers every effective prompt must have.</p>
+      <ul class="module-lessons">
+        <li>The 5 components of a complete prompt</li>
+        <li>Role / Context / Task / Format / Constraints</li>
+        <li>Why vague prompts get vague answers</li>
+        <li>Positive vs. negative instructions</li>
+        <li>Tone, voice, and register directives</li>
+        <li>Output length control techniques</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Core Skill</span>
+      <span class="module-num">MODULE 03</span>
+      <h3 class="module-title">System Prompts & Roles</h3>
+      <p class="module-desc">System prompts are the invisible engine behind every great AI product. Master them, and you unlock a completely different level of control.</p>
+      <ul class="module-lessons">
+        <li>What is a system prompt and how it differs from user input</li>
+        <li>Defining persona, expertise, and behavior rules</li>
+        <li>Persistent instructions across a conversation</li>
+        <li>Setting constraints and guardrails</li>
+        <li>Real system prompts from real products, analysed</li>
+        <li>Building your own reusable system prompt library</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Core Skill</span>
+      <span class="module-num">MODULE 04</span>
+      <h3 class="module-title">Chain-of-Thought & Reasoning</h3>
+      <p class="module-desc">Force the AI to think step by step. This single technique dramatically improves accuracy on complex tasks, math, logic, and multi-step reasoning.</p>
+      <ul class="module-lessons">
+        <li>What chain-of-thought (CoT) prompting is</li>
+        <li>Zero-shot CoT: "Think step by step"</li>
+        <li>Few-shot CoT: showing worked examples</li>
+        <li>Scratchpad and reasoning-trace techniques</li>
+        <li>Self-consistency: majority-voting across outputs</li>
+        <li>When NOT to use CoT</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Core Skill</span>
+      <span class="module-num">MODULE 05</span>
+      <h3 class="module-title">Few-Shot & In-Context Learning</h3>
+      <p class="module-desc">Show, don't just tell. Learn how to use examples inside your prompt to dramatically reshape AI output quality and consistency.</p>
+      <ul class="module-lessons">
+        <li>Zero-shot vs. one-shot vs. few-shot explained</li>
+        <li>How many examples is enough?</li>
+        <li>Crafting high-quality demonstrations</li>
+        <li>Example selection strategy (diversity vs. similarity)</li>
+        <li>Dynamic few-shot: picking examples with embeddings</li>
+        <li>In-context learning limitations</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Core Skill</span>
+      <span class="module-num">MODULE 06</span>
+      <h3 class="module-title">Output Formatting & Structured Data</h3>
+      <p class="module-desc">Getting useful output isn't just about the content — it's about the shape. Learn to reliably extract structured data from AI.</p>
+      <ul class="module-lessons">
+        <li>Requesting JSON, XML, Markdown, and tables</li>
+        <li>Schema-constrained generation</li>
+        <li>Reliable data extraction from long texts</li>
+        <li>Using XML tags in prompts (Claude-specific)</li>
+        <li>Post-processing and parsing strategies</li>
+        <li>Handling inconsistent formatting gracefully</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Advanced</span>
+      <span class="module-num">MODULE 07</span>
+      <h3 class="module-title">Controlling Randomness: Temperature, Top-P & More</h3>
+      <p class="module-desc">The hidden parameters that most users never touch — but which explain everything about why AI outputs vary.</p>
+      <ul class="module-lessons">
+        <li>What temperature actually controls</li>
+        <li>Low temperature (0–0.3): deterministic & precise</li>
+        <li>High temperature (0.8–1.5): creative & variable</li>
+        <li>Top-P (nucleus sampling) explained</li>
+        <li>Top-K sampling</li>
+        <li>Frequency and presence penalties</li>
+        <li>Best settings per task type</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Advanced</span>
+      <span class="module-num">MODULE 08</span>
+      <h3 class="module-title">Hallucination Control & Factual Grounding</h3>
+      <p class="module-desc">AI confidently makes things up. This module is dedicated entirely to preventing, detecting, and correcting hallucinations.</p>
+      <ul class="module-lessons">
+        <li>What causes hallucinations (mechanistically)</li>
+        <li>Retrieval-Augmented Generation (RAG) basics</li>
+        <li>Telling AI to say "I don't know"</li>
+        <li>Citation and sourcing prompts</li>
+        <li>The "verify before you use" workflow</li>
+        <li>Confidence calibration techniques</li>
+        <li>Fact-checking prompts</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Advanced</span>
+      <span class="module-num">MODULE 09</span>
+      <h3 class="module-title">Prompt Chaining & Agentic Workflows</h3>
+      <p class="module-desc">One prompt is rarely enough for complex work. Chain them together, route outputs, and build mini-pipelines that get hard things done.</p>
+      <ul class="module-lessons">
+        <li>Sequential prompt chaining</li>
+        <li>Conditional branching in workflows</li>
+        <li>Routing and orchestration patterns</li>
+        <li>Map-reduce for long documents</li>
+        <li>Parallelizing AI tasks</li>
+        <li>Agentic loops and tool use</li>
+        <li>When pipelines break: error handling</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Advanced</span>
+      <span class="module-num">MODULE 10</span>
+      <h3 class="module-title">Multimodal Prompting (Images, Files & Beyond)</h3>
+      <p class="module-desc">Modern AI handles text, images, documents, code, and more. Learn how to prompt across modalities for maximum capability.</p>
+      <ul class="module-lessons">
+        <li>Prompting with images: what works and what doesn't</li>
+        <li>Image analysis, description, and data extraction</li>
+        <li>Document and PDF prompting strategies</li>
+        <li>Code-as-context: attaching files</li>
+        <li>Audio and video capabilities overview</li>
+        <li>Combining text and image context effectively</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Professional</span>
+      <span class="module-num">MODULE 11</span>
+      <h3 class="module-title">Prompt Engineering for Business & Automation</h3>
+      <p class="module-desc">Turn prompting skills into tangible business value. From marketing copy to customer support, learn the templates that scale.</p>
+      <ul class="module-lessons">
+        <li>Creating reusable prompt templates</li>
+        <li>Content generation systems</li>
+        <li>Customer support automation prompts</li>
+        <li>Data analysis and summarization prompts</li>
+        <li>Code generation and review workflows</li>
+        <li>Building an internal prompt library</li>
+        <li>Measuring and improving prompt performance</li>
+      </ul>
+    </div>
+
+    <div class="module-card reveal">
+      <span class="module-badge">Professional</span>
+      <span class="module-num">MODULE 12</span>
+      <h3 class="module-title">Model Differences, APIs & Future-Proofing</h3>
+      <p class="module-desc">GPT-4o, Claude, Gemini, Llama — they're not the same. Learn the differences that matter and how to write prompts that work everywhere.</p>
+      <ul class="module-lessons">
+        <li>Key behavioral differences across major models</li>
+        <li>OpenAI vs Anthropic vs Google prompt quirks</li>
+        <li>Using the API vs. chat interface</li>
+        <li>Prompt versioning and testing</li>
+        <li>A/B testing your prompts</li>
+        <li>Staying current as models evolve</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- FRAMEWORK -->
+<div class="section-full" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-tag">✦ The Core Framework</span>
+      <h2 class="section-title">The CRATE Framework</h2>
+      <p class="section-sub">Every powerful prompt follows this structure. We invented CRATE to make it easy to remember and apply consistently across any task.</p>
+    </div>
+
+    <div class="framework-grid reveal">
+      <div class="framework-card">
+        <span class="fw-letter">C</span>
+        <div class="fw-word">Context</div>
+        <div class="fw-desc">Set the scene. Who are you? What situation are you in? What background does the AI need to understand before it can help?</div>
+      </div>
+      <div class="framework-card">
+        <span class="fw-letter">R</span>
+        <div class="fw-word">Role</div>
+        <div class="fw-desc">Tell the AI who to be. A senior developer, a marketing copywriter, a Socratic teacher — the role dramatically shapes tone, depth, and vocabulary.</div>
+      </div>
+      <div class="framework-card">
+        <span class="fw-letter">A</span>
+        <div class="fw-word">Action</div>
+        <div class="fw-desc">The core task. Be precise: not "write something about X" but "write a 200-word summary of X for a non-technical audience, focusing on business impact."</div>
+      </div>
+      <div class="framework-card">
+        <span class="fw-letter">T</span>
+        <div class="fw-word">Target</div>
+        <div class="fw-desc">Define the audience and the intended use. Who will read this? Where will it appear? What should they think or do after consuming it?</div>
+      </div>
+      <div class="framework-card">
+        <span class="fw-letter">E</span>
+        <div class="fw-word">Examples</div>
+        <div class="fw-desc">Show don't just tell. Include samples of the format, tone, or style you want. Even one example shifts AI output quality significantly.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCEPTS DEEP DIVE -->
+<section id="concepts">
+  <div class="reveal">
+    <span class="section-tag">✦ Deep Dive Concepts</span>
+    <h2 class="section-title">The knowledge that<br>changes everything.</h2>
+    <p class="section-sub">Click through the core concepts covered in depth in this course — with real code and examples.</p>
+  </div>
+
+  <div class="concepts-layout">
+    <div class="concept-tabs">
+      <div class="concept-tab active" onclick="switchConcept(0)">
+        <span class="concept-tab-label">Tokenization</span>
+        <span class="concept-tab-icon">🔤</span>
+      </div>
+      <div class="concept-tab" onclick="switchConcept(1)">
+        <span class="concept-tab-label">Temperature</span>
+        <span class="concept-tab-icon">🌡️</span>
+      </div>
+      <div class="concept-tab" onclick="switchConcept(2)">
+        <span class="concept-tab-label">Chain-of-Thought</span>
+        <span class="concept-tab-icon">🧠</span>
+      </div>
+      <div class="concept-tab" onclick="switchConcept(3)">
+        <span class="concept-tab-label">Context Windows</span>
+        <span class="concept-tab-icon">📦</span>
+      </div>
+      <div class="concept-tab" onclick="switchConcept(4)">
+        <span class="concept-tab-label">System Prompts</span>
+        <span class="concept-tab-icon">⚙️</span>
+      </div>
+      <div class="concept-tab" onclick="switchConcept(5)">
+        <span class="concept-tab-label">RAG</span>
+        <span class="concept-tab-icon">📚</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="concept-panel active" id="panel-0">
+        <h3>Tokenization</h3>
+        <p>AI models don't read words — they read tokens. A token is roughly 3–4 characters of English text. "Unbelievable" is 3 tokens. "cat" is 1. This has real implications for how you write prompts.</p>
+        <p>Token limits define how much an AI can read in one go. GPT-4o handles 128K tokens (~96,000 words). Claude handles up to 200K. Understanding tokens helps you manage long documents, estimate API costs, and avoid truncation errors.</p>
+        <div class="code-block">
+<span class="cm"># Token counts for common items:</span>
+<span class="hl">"Hello world"</span>        → <span class="str">2 tokens</span>
+<span class="hl">"I love prompting"</span>   → <span class="str">4 tokens</span>
+<span class="hl">"supercalifragilistic"</span> → <span class="str">7 tokens</span>
+<span class="hl">1 page of text</span>      ≈ <span class="str">400–500 tokens</span>
+<span class="hl">1 novel</span>             ≈ <span class="str">100,000 tokens</span>
+        </div>
+        <div class="tip-box">💡 Tip: Use <strong>tiktoken</strong> (OpenAI's library) or Anthropic's token counter to estimate token usage before sending expensive API calls.</div>
+      </div>
+
+      <div class="concept-panel" id="panel-1">
+        <h3>Temperature & Randomness</h3>
+        <p>Temperature is a number (usually 0 to 2) that controls how "creative" or "random" the AI is when picking the next token. At temperature 0, the model always picks the single most-probable next token. At temperature 2, it samples wildly from the distribution.</p>
+        <p>This is one of the most misunderstood settings. Most people leave it at default, but for professional use, you should always choose deliberately.</p>
+        <div class="code-block">
+<span class="cm"># Recommended temperature settings:</span>
+<span class="kw">temperature = 0</span>    <span class="cm">→ Deterministic facts, extraction</span>
+<span class="kw">temperature = 0.3</span>  <span class="cm">→ Technical writing, code</span>
+<span class="kw">temperature = 0.7</span>  <span class="cm">→ Good all-purpose default</span>
+<span class="kw">temperature = 1.0</span>  <span class="cm">→ Creative writing, brainstorming</span>
+<span class="kw">temperature = 1.5</span>  <span class="cm">→ Highly experimental / poetic</span>
+        </div>
+        <div class="warning-box">⚠️ Warning: High temperature + factual questions = hallucinations. Always lower temperature when accuracy matters.</div>
+      </div>
+
+      <div class="concept-panel" id="panel-2">
+        <h3>Chain-of-Thought Prompting</h3>
+        <p>Research by Google Brain (Wei et al., 2022) showed that simply adding "Let's think step by step" to a prompt increased math accuracy dramatically. This works because it forces the model to allocate tokens to intermediate reasoning, not just jump to an answer.</p>
+        <p>You can use zero-shot CoT (just tell it to think step by step) or few-shot CoT (show it examples of step-by-step reasoning).</p>
+        <div class="code-block">
+<span class="cm"># Zero-shot Chain-of-Thought:</span>
+<span class="str">"What is 17% of 340? Think through</span>
+<span class="str"> this step by step before answering."</span>
+
+<span class="cm"># Few-shot Chain-of-Thought:</span>
+<span class="str">"Q: A train travels 60mph for 2.5 hrs.</span>
+<span class="str"> How far does it travel?</span>
+<span class="str"> A: Step 1: distance = speed × time</span>
+<span class="str">    Step 2: 60 × 2.5 = 150</span>
+<span class="str">    Answer: 150 miles.</span>
+<span class="str"> Q: [your actual question here]"</span>
+        </div>
+        <div class="tip-box">💡 Pro move: Ask the model to show its work even when you don't need it — then check the reasoning for errors before trusting the final answer.</div>
+      </div>
+
+      <div class="concept-panel" id="panel-3">
+        <h3>Context Windows</h3>
+        <p>The context window is the total amount of text an AI can "see" in one conversation — both the input you send and the output it generates. Everything outside this window is completely invisible to the model. It literally cannot remember it.</p>
+        <p>Modern models have massive context windows, but longer context doesn't mean better reasoning. There's a well-documented "lost-in-the-middle" phenomenon where models perform worse at recalling information buried in the center of very long contexts.</p>
+        <div class="code-block">
+<span class="cm"># Context window comparison (2025):</span>
+<span class="hl">GPT-4o</span>         → <span class="str">128K tokens (~96K words)</span>
+<span class="hl">Claude 3.5</span>     → <span class="str">200K tokens (~150K words)</span>
+<span class="hl">Gemini 1.5 Pro</span> → <span class="str">1M tokens (~750K words)</span>
+<span class="hl">Llama 3.1</span>      → <span class="str">128K tokens</span>
+        </div>
+        <div class="warning-box">⚠️ The "lost in the middle" problem: Put your most important information at the START or END of long prompts — never bury critical instructions in the middle.</div>
+      </div>
+
+      <div class="concept-panel" id="panel-4">
+        <h3>System Prompts</h3>
+        <p>A system prompt is a special message sent to the AI before the user conversation begins. It defines the AI's persona, rules, knowledge constraints, response style, and hard limits. It's invisible to end-users in most products — but incredibly powerful.</p>
+        <p>Think of it as the job description + employee handbook you give the AI before it starts work. Everything in the system prompt has elevated authority compared to user messages in most modern models.</p>
+        <div class="code-block">
+<span class="cm"># Example system prompt skeleton:</span>
+<span class="str">You are [NAME], a [ROLE] specialized</span>
+<span class="str">in [DOMAIN]. Your audience is [WHO].</span>
+<span class="str">
+Always:
+  - [Positive behavior 1]
+  - [Positive behavior 2]
+
+Never:
+  - [Prohibited action 1]
+  - [Prohibited action 2]
+
+Respond in [TONE]. Keep answers
+[LENGTH]. Format as [FORMAT].</span>
+        </div>
+        <div class="tip-box">💡 System prompts compound. A well-written system prompt reduces the length and complexity needed in every individual user message.</div>
+      </div>
+
+      <div class="concept-panel" id="panel-5">
+        <h3>Retrieval-Augmented Generation (RAG)</h3>
+        <p>RAG is the technique of fetching relevant documents from an external knowledge base and injecting them into the prompt context before the AI generates a response. This lets you ground AI outputs in verified, up-to-date information — eliminating hallucinations about facts in your data.</p>
+        <p>This is how most serious enterprise AI products work. Knowing RAG at even a basic level makes you far more effective as both a prompt engineer and an AI product builder.</p>
+        <div class="code-block">
+<span class="cm"># Simplified RAG flow:</span>
+<span class="kw">1.</span> User asks a question
+<span class="kw">2.</span> System embeds question → vector
+<span class="kw">3.</span> Search vector database for similar docs
+<span class="kw">4.</span> Retrieve top K relevant chunks
+<span class="kw">5.</span> Inject chunks into prompt as context:
+   <span class="str">"Using only the following info:
+   [RETRIEVED DOCS]
+   Answer: [USER QUESTION]"</span>
+<span class="kw">6.</span> AI generates grounded answer
+        </div>
+        <div class="tip-box">💡 Even without a vector database, you can do "manual RAG" — copy-pasting relevant documents into your prompt. For many tasks, this is all you need.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BAD vs GOOD EXAMPLES -->
+<div class="section-full" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-tag">✦ Real Examples</span>
+      <h2 class="section-title">Bad prompts vs. great prompts</h2>
+      <p class="section-sub">See the exact difference in quality with side-by-side comparisons of weak and strong prompting for the same tasks.</p>
+    </div>
+
+    <div class="examples-grid reveal">
+      <div class="example-card">
+        <div class="example-header">
+          <span class="example-type type-bad">✗ Weak Prompt</span>
+          <span style="font-size:0.75rem;color:var(--muted);">Writing Task</span>
+        </div>
+        <div class="example-body">"Write me an email about the meeting."</div>
+        <div class="example-note">No context, audience, tone, length, purpose, or goal. You'll get a generic, useless template.</div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-header">
+          <span class="example-type type-good">✓ Strong Prompt</span>
+          <span style="font-size:0.75rem;color:var(--muted);">Writing Task</span>
+        </div>
+        <div class="example-body">"Write a 3-paragraph follow-up email to a potential B2B client (mid-size logistics company) after our first sales meeting. Tone: professional but warm. Include: a brief recap of their pain points (manual tracking, errors), how our software solves them, and a clear CTA to schedule a product demo. Avoid jargon. End with a genuine line about enjoying the conversation."</div>
+        <div class="example-note">Context, audience, tone, structure, length, CTA, constraint — all specified. Output will be usable on first try.</div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-header">
+          <span class="example-type type-bad">✗ Weak Prompt</span>
+          <span style="font-size:0.75rem;color:var(--muted);">Analysis Task</span>
+        </div>
+        <div class="example-body">"Summarize this document."</div>
+        <div class="example-note">What length? For whom? What aspects matter? You'll get a random, probably too-long, generic summary.</div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-header">
+          <span class="example-type type-good">✓ Strong Prompt</span>
+          <span style="font-size:0.75rem;color:var(--muted);">Analysis Task</span>
+        </div>
+        <div class="example-body">"You are a senior business analyst. Summarize the attached report in exactly 5 bullet points for a busy C-suite executive who has 2 minutes to read this. Each bullet should be one clear sentence. Focus only on: key findings, financial implications, and recommended actions. Use plain language — no jargon."</div>
+        <div class="example-note">Role, format, audience, constraints, focus — the AI has everything it needs to produce exactly what you want.</div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-header">
+          <span class="example-type type-bad">✗ Weak Prompt</span>
+          <span style="font-size:0.75rem;color:var(--muted);">Code Task</span>
+        </div>
+        <div class="example-body">"Fix my code."</div>
+        <div class="example-note">No language, no error message, no code provided, no explanation of expected behavior. Impossible to help effectively.</div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-header">
+          <span class="example-type type-good">✓ Strong Prompt</span>
+          <span style="font-size:0.75rem;color:var(--muted);">Code Task</span>
+        </div>
+        <div class="example-body">"I have a Python 3.11 function that should filter a list of dictionaries by a given key-value pair. It works for strings but fails silently for integers — it just returns an empty list. Here's the code: [code]. Expected input: filter_by(data, 'age', 30). Expected output: all dicts where age == 30. Identify the bug, explain why it happens, then provide the corrected function."</div>
+        <div class="example-note">Language version, expected behavior, failing behavior, code, example I/O — and a structured ask (explain + fix).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TECHNIQUES -->
+<section id="techniques">
+  <div class="reveal">
+    <span class="section-tag">✦ 15+ Techniques</span>
+    <h2 class="section-title">Every technique you'll master</h2>
+    <p class="section-sub">From day-one basics to advanced professional methods — with a clear level indicator for each.</p>
+  </div>
+
+  <div class="techniques-grid reveal">
+
+    <div class="technique-card">
+      <span class="technique-level level-beg">Beginner</span>
+      <span class="technique-icon">🎯</span>
+      <div class="technique-title">Role Prompting</div>
+      <div class="technique-desc">Assign the AI a specific expert identity. "Act as a UX researcher" or "You are a Harvard law professor" activates domain-specific vocabulary, reasoning patterns, and depth.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-beg">Beginner</span>
+      <span class="technique-icon">📝</span>
+      <div class="technique-title">Instruction Layering</div>
+      <div class="technique-desc">Build prompts with multiple nested instructions: primary task → constraints → format → tone. Each layer adds precision. The order matters — most important instructions first and last.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-beg">Beginner</span>
+      <span class="technique-icon">🔄</span>
+      <div class="technique-title">Iterative Refinement</div>
+      <div class="technique-desc">Treat prompting as a dialogue, not a one-shot transaction. Follow up with: "Make it shorter," "More formal," "Redo the second paragraph focusing on ROI." Build toward your target.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-int">Intermediate</span>
+      <span class="technique-icon">🧪</span>
+      <div class="technique-title">Contrastive Prompting</div>
+      <div class="technique-desc">Tell the AI both what to do AND what not to do. "Write a product description. Do NOT use exclamation marks, avoid hype words like 'revolutionary', and don't mention competitors."</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-int">Intermediate</span>
+      <span class="technique-icon">🪞</span>
+      <div class="technique-title">Reflection & Self-Critique</div>
+      <div class="technique-desc">Ask the AI to evaluate its own output: "Review your answer and identify any weaknesses, then rewrite with those fixed." This reliably improves output quality without you doing the reviewing.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-int">Intermediate</span>
+      <span class="technique-icon">🎲</span>
+      <div class="technique-title">Multiple Persona Output</div>
+      <div class="technique-desc">Ask for the same topic from multiple perspectives: "Give me 3 versions of this headline — one for millennials, one for Gen X executives, one for technical engineers." Instant A/B testing.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-int">Intermediate</span>
+      <span class="technique-icon">🔍</span>
+      <div class="technique-title">Decomposition Prompting</div>
+      <div class="technique-desc">Break impossible tasks into solvable sub-tasks. "First, list the 5 main stakeholders. Then, for each stakeholder, identify their primary concern. Finally, draft a plan addressing each concern."</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-int">Intermediate</span>
+      <span class="technique-icon">📐</span>
+      <div class="technique-title">Format Anchoring</div>
+      <div class="technique-desc">Show the exact output format you want — including empty brackets, placeholder text, and structural markers. The AI will fill in your template precisely, reliably matching your schema.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-adv">Advanced</span>
+      <span class="technique-icon">🌐</span>
+      <div class="technique-title">Tree of Thought (ToT)</div>
+      <div class="technique-desc">An advanced extension of CoT where the model explores multiple reasoning branches simultaneously, evaluates them, and backtracks if a branch fails. Dramatically better for complex planning problems.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-adv">Advanced</span>
+      <span class="technique-icon">🗳️</span>
+      <div class="technique-title">Self-Consistency Voting</div>
+      <div class="technique-desc">Run the same prompt multiple times with higher temperature, then choose the answer that appears most frequently. Particularly effective for math, logic, and ambiguous analysis tasks.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-adv">Advanced</span>
+      <span class="technique-icon">🔗</span>
+      <div class="technique-title">Prompt Chaining</div>
+      <div class="technique-desc">Pass the output of one AI call as the input to the next. Research → outline → draft → edit → SEO-optimize — each step with a specialized prompt, producing output far beyond what one prompt can achieve.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-adv">Advanced</span>
+      <span class="technique-icon">🤖</span>
+      <div class="technique-title">Meta-Prompting</div>
+      <div class="technique-desc">Ask the AI to write a better prompt for you. "I want to prompt an AI to do [task]. Write me the best possible prompt for this." Then use that prompt. Recursive and surprisingly effective.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-adv">Advanced</span>
+      <span class="technique-icon">📊</span>
+      <div class="technique-title">Constitutional Prompting</div>
+      <div class="technique-desc">Give the AI a set of explicit principles (a "constitution") it must follow when generating and then self-evaluating its output. Based on Anthropic's Constitutional AI research.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-adv">Advanced</span>
+      <span class="technique-icon">🧬</span>
+      <div class="technique-title">Prompt Injection Defense</div>
+      <div class="technique-desc">Understand how malicious input can hijack AI behavior — and how to write system prompts that are robust against injection attacks in production applications.</div>
+    </div>
+
+    <div class="technique-card">
+      <span class="technique-level level-adv">Advanced</span>
+      <span class="technique-icon">⚡</span>
+      <div class="technique-title">Structured Output Forcing</div>
+      <div class="technique-desc">Use JSON mode, XML tags, and schema constraints to guarantee parseable, consistent output from every API call — eliminating the need for fragile string parsing.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<div class="section-full" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <div class="reveal">
+      <span class="section-tag">✦ Bonus Material</span>
+      <h2 class="section-title">The Prompt Engineer's Cheat Sheet</h2>
+      <p class="section-sub">A quick-reference glossary of every term and concept you'll encounter. Included with every plan.</p>
+    </div>
+
+    <div class="cheatsheet reveal">
+      <div class="cheatsheet-header">
+        <span class="cheatsheet-title">📋 Core Glossary — Prompt Engineering</span>
+        <span style="font-size:0.78rem;color:var(--muted);">Included free with enrollment</span>
+      </div>
+      <div class="cheatsheet-body">
+        <div class="cs-col">
+          <span class="cs-col-title">Model Mechanics</span>
+          <div class="cs-item">
+            <div class="cs-term">Token</div>
+            <div class="cs-def">~3-4 characters; the basic unit AI reads and generates</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Context Window</div>
+            <div class="cs-def">Max tokens the model can process in one request</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Temperature</div>
+            <div class="cs-def">0-2 scale controlling output randomness</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Top-P / Nucleus</div>
+            <div class="cs-def">Limits sampling to top-probability tokens (0-1)</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Hallucination</div>
+            <div class="cs-def">Confident, plausible-sounding but incorrect output</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">RLHF</div>
+            <div class="cs-def">Reinforcement Learning from Human Feedback — how models align to human preferences</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Embedding</div>
+            <div class="cs-def">A numerical vector representation of text for similarity search</div>
+          </div>
+        </div>
+        <div class="cs-col">
+          <span class="cs-col-title">Prompting Techniques</span>
+          <div class="cs-item">
+            <div class="cs-term">Zero-Shot</div>
+            <div class="cs-def">Task given with no examples — just instructions</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Few-Shot</div>
+            <div class="cs-def">2-10 worked examples included in the prompt</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Chain-of-Thought</div>
+            <div class="cs-def">Instructing step-by-step reasoning before final answer</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">System Prompt</div>
+            <div class="cs-def">Pre-conversation instructions defining AI behavior</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Role Prompting</div>
+            <div class="cs-def">Assigning an expert identity to the model</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Prompt Chaining</div>
+            <div class="cs-def">Sequential prompts where each output feeds the next</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Meta-Prompting</div>
+            <div class="cs-def">Using AI to generate or improve your own prompts</div>
+          </div>
+        </div>
+        <div class="cs-col">
+          <span class="cs-col-title">Architecture & Systems</span>
+          <div class="cs-item">
+            <div class="cs-term">RAG</div>
+            <div class="cs-def">Retrieval-Augmented Generation — grounding outputs in retrieved documents</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Vector Database</div>
+            <div class="cs-def">Stores embeddings for semantic similarity search (Pinecone, Weaviate, etc.)</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Agent / Agentic</div>
+            <div class="cs-def">AI that takes actions, uses tools, and loops autonomously</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Tool Use / Function Calling</div>
+            <div class="cs-def">AI calling external APIs, databases, or code</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Fine-Tuning</div>
+            <div class="cs-def">Training a model further on domain-specific data</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Prompt Injection</div>
+            <div class="cs-def">Malicious input that overrides AI's intended instructions</div>
+          </div>
+          <div class="cs-item">
+            <div class="cs-term">Latency</div>
+            <div class="cs-def">Time from API request to first/full token response</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="reveal" style="text-align:center">
+    <span class="section-tag">✦ Student Reviews</span>
+    <h2 class="section-title">What our students say</h2>
+    <div class="divider" style="margin:1.5rem auto;"></div>
+  </div>
+
+  <div class="testimonials-grid reveal">
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"I went from getting mediocre output from ChatGPT to building an entire content pipeline for my agency. The module on prompt chaining alone saved me 15 hours a week. Worth 10x the price."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">SV</div>
+        <div>
+          <div class="author-name">Sophie V.</div>
+          <div class="author-title">Content Agency Owner, Berlin</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"I'm a developer and I thought I already knew AI. I was wrong. The technical depth here is unlike anything I found on YouTube. Temperature, RAG, constitutional prompting — it's all explained clearly with real code."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">MK</div>
+        <div>
+          <div class="author-name">Marcus K.</div>
+          <div class="author-title">Senior Software Engineer, Amsterdam</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"As a non-technical marketer, I was scared this would be over my head. It's not. By Module 3 I had a system prompt running that makes Claude behave like our brand voice — consistently, every single time."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">AL</div>
+        <div>
+          <div class="author-name">Anika L.</div>
+          <div class="author-title">Head of Marketing, Rotterdam</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="text-align:center">
+  <div class="reveal">
+    <span class="section-tag">✦ Simple Pricing</span>
+    <h2 class="section-title">Start mastering prompts today</h2>
+    <p class="section-sub" style="margin:0 auto">One course, every technique, lifetime access. No subscriptions. No paywalled lessons.</p>
+  </div>
+
+  <div class="pricing-wrapper reveal">
+
+    <div class="pricing-card">
+      <div class="pricing-tier">Essential</div>
+      <div class="pricing-price"><sup>€</sup>97</div>
+      <div class="pricing-period">one-time payment · lifetime access</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> All 12 course modules</li>
+        <li><span class="check">✓</span> 80+ real prompt examples</li>
+        <li><span class="check">✓</span> CRATE Framework guide</li>
+        <li><span class="check">✓</span> Cheat sheet & glossary PDF</li>
+        <li><span class="check">✓</span> Lifetime access + updates</li>
+        <li><span class="check">✓</span> Community forum access</li>
+      </ul>
+      <button class="btn-secondary" style="width:100%">Get Started</button>
+    </div>
+
+    <div class="pricing-card featured">
+      <div class="featured-label">Most Popular</div>
+      <div class="pricing-tier">Complete</div>
+      <div class="pricing-price"><sup>€</sup>197</div>
+      <div class="pricing-period">one-time payment · lifetime access</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Everything in Essential</li>
+        <li><span class="check">✓</span> Prompt template library (50+ templates)</li>
+        <li><span class="check">✓</span> Business use-case playbooks</li>
+        <li><span class="check">✓</span> API integration guide</li>
+        <li><span class="check">✓</span> Prompt audit worksheet</li>
+        <li><span class="check">✓</span> Private Discord community</li>
+        <li><span class="check">✓</span> Monthly live Q&A sessions</li>
+      </ul>
+      <button class="btn-primary" style="width:100%">Get Complete Access</button>
+    </div>
+
+    <div class="pricing-card">
+      <div class="pricing-tier">Team</div>
+      <div class="pricing-price"><sup>€</sup>497</div>
+      <div class="pricing-period">up to 10 seats · lifetime access</div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Everything in Complete</li>
+        <li><span class="check">✓</span> Up to 10 team seats</li>
+        <li><span class="check">✓</span> Team prompt library collaboration</li>
+        <li><span class="check">✓</span> Dedicated onboarding call</li>
+        <li><span class="check">✓</span> Custom prompt audit for your use-case</li>
+        <li><span class="check">✓</span> Priority support</li>
+      </ul>
+      <button class="btn-secondary" style="width:100%">Get Team Access</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="text-align:center">
+  <div class="reveal">
+    <span class="section-tag">✦ Common Questions</span>
+    <h2 class="section-title">Everything you're wondering</h2>
+  </div>
+
+  <div class="faq-list reveal">
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Do I need a technical background to take this course?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Not at all. The course is designed for complete beginners through advanced professionals. Modules 1–6 assume zero prior knowledge and build from the ground up. Modules 7–12 progressively introduce more technical concepts, but always with plain-English explanations first. If you can write an email, you can start this course.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Which AI models does this course cover?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">The fundamentals apply to every major model — Claude, ChatGPT (GPT-4o), Gemini, and open-source models like Llama. We specifically call out model-specific quirks and differences where they matter. You'll be able to prompt effectively across all platforms, not just one.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Will this course stay up to date as AI evolves?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Yes. All enrolled students receive free updates. When new models are released, when techniques evolve, or when new research changes best practices, we update the course. You buy once and stay current forever. This is a living course, not a static product.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        Is there a money-back guarantee?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Yes. We offer a 30-day, no-questions-asked refund policy. If you complete the first 4 modules and don't see immediate, measurable improvement in your AI outputs, email us for a full refund. We're confident you won't need it.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        How is this different from free YouTube tutorials?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">Free content covers surface-level tips. This course goes deep into the mechanics — how tokenization works, why temperature matters, how to architect agentic workflows, how to prevent hallucinations. You get a complete mental model, not a collection of tricks. It's the difference between understanding the system and collecting hacks.</div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        How long does it take to complete?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">At a comfortable pace, 6–8 hours of focused study covers all 12 modules. Many students complete it in a weekend. But because you have lifetime access, you can take it entirely at your own pace and return to specific modules anytime you need a refresher.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-section reveal">
+  <h2>The people getting the most<br>from AI are learning this <em style="color:var(--accent);font-family:'Playfair Display',serif">now.</em></h2>
+  <p>The gap between those who prompt well and those who don't is widening every month. Join thousands of professionals who've already made the switch.</p>
+  <a href="#pricing" class="btn-primary" style="font-size:1.05rem;padding:1.1rem 2.5rem;">Enroll in Prompt Mastery →</a>
+  <div class="guarantee">
+    <span>🔒</span>
+    <span>30-day money-back guarantee · Lifetime access · Instant enrollment</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Prompt Mastery</div>
+  <div class="footer-sub">The complete AI prompting course for 2025 and beyond.</div>
+  <ul class="footer-links">
+    <li><a href="#curriculum">Curriculum</a></li>
+    <li><a href="#concepts">Concepts</a></li>
+    <li><a href="#techniques">Techniques</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#">Privacy Policy</a></li>
+    <li><a href="#">Terms of Service</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 Prompt Mastery. All rights reserved.</div>
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progress-bar').style.width = (scrolled / total * 100) + '%';
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Concept tabs
+  function switchConcept(index) {
+    document.querySelectorAll('.concept-tab').forEach((tab, i) => {
+      tab.classList.toggle('active', i === index);
+    });
+    document.querySelectorAll('.concept-panel').forEach((panel, i) => {
+      panel.classList.toggle('active', i === index);
+    });
+  }
+
+  // FAQ accordion
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+</script>
+
+</body>
+</html>
